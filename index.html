@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZeraMine</title>
+<style>
+:root{--bg:#120d1f;--card:rgba(24,18,40,.80);--text:#f2f2f4;--muted:#c0bad0;--accent:#e8590c;--line:rgba(255,255,255,.14);--soft:rgba(255,255,255,.10);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Sans Thai","Sarabun",system-ui,sans-serif;padding:16px}
+#bgimg{position:fixed;inset:0;z-index:-1;background:#120d1f center/cover no-repeat}
+#bgimg::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(10,6,20,.35),rgba(10,6,20,.65))}
+.wrap{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+h1{font-size:22px;text-align:center;margin:4px 0 0;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+h2{font-size:16px;margin:0 0 6px}
+.card{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);background:var(--card);border:1px solid var(--line);border-radius:20px;padding:6px 16px 16px}
+.card.pad{padding-top:16px}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;color:var(--text)}
+.item{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.iimg{width:68px;height:68px;flex:none;border-radius:12px;background:var(--soft) center/contain no-repeat}
+.iimg.cover{background-size:cover}
+.mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.nm{font-weight:600;font-size:15px}
+.sub{font-size:12px;color:var(--muted);display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px}
+.ctl{display:flex;align-items:center;gap:6px}
+.ctl .c{min-width:40px;text-align:center;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.ctl button{width:40px;height:40px;font-size:22px;background:var(--soft)}
+.ctl button.p{background:var(--accent);color:#fff}
+.ctl button:active{transform:scale(.95)}
+.rst{background:transparent;color:var(--muted);font-size:12px;padding:2px 6px;border:1px solid var(--line)}
+.rst.arm,.reset.arm{background:#d92d20;border-color:#d92d20;color:#fff}
+.reset{width:100%;padding:12px;background:var(--card);border:1px solid var(--line)}
+.st{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding:9px 0;border-top:1px solid var(--line)}
+.st:first-of-type{border-top:0}
+.st .l{font-size:14px}
+.st .v{text-align:right;font-weight:700;font-size:18px;white-space:nowrap}
+.st .d{font-weight:400;font-size:11px;color:var(--muted);display:block;white-space:normal}
+.hist{max-height:300px;overflow-y:auto}
+.h{display:flex;gap:8px;align-items:baseline;padding:4px 0;border-top:1px solid var(--line);font-size:12px}
+.h:first-child{border-top:0}
+.h .hn{color:var(--muted);min-width:30px}
+.h .tm{color:var(--muted);flex:1}
+.hit{color:#7ee787;font-weight:600}
+.miss{color:var(--muted)}
+.hint{font-size:12px;color:var(--muted);text-align:center}
+.warn{display:none;font-size:12px;color:#ff8a80;text-align:center}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:10;padding:16px}
+.ov[hidden]{display:none}
+.sheet{width:100%;max-width:420px;background:#1b1530;border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.q{font-size:18px;font-weight:700;text-align:center}
+.a{display:flex;flex-direction:column;gap:10px}
+.no{padding:16px;font-size:18px;background:var(--soft)}
+.yes{display:flex;gap:8px;align-items:center}
+.stp{display:flex;align-items:center;gap:2px;background:var(--soft);border-radius:14px;padding:4px}
+.stp button{width:40px;height:44px;background:transparent;font-size:22px}
+.stp span{min-width:28px;text-align:center;font-weight:700;font-size:18px}
+.ok{flex:1;padding:16px;font-size:18px;background:var(--accent);color:#fff;font-weight:700}
+.cx{background:transparent;color:var(--muted);padding:8px;font-size:14px}
+.brand{font-family:"Cinzel",Georgia,"Times New Roman",serif;font-size:42px;font-weight:800;letter-spacing:2px;text-align:center;margin-top:2px;background:linear-gradient(180deg,#eacdff 0%,#9b78dd 55%,#6339c0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-stroke:1px #280e57;filter:drop-shadow(0 0 10px rgba(155,120,221,.65)) drop-shadow(0 2px 3px rgba(0,0,0,.7))}
+.credit{text-align:center;color:rgba(255,255,255,.62);font-size:13px;margin-top:-8px;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.foot{text-align:center;color:rgba(255,255,255,.5);font-size:11px;line-height:1.7;padding:2px 8px 16px;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+#clock{text-align:center;color:#fff;font-size:13px;text-shadow:0 1px 6px rgba(0,0,0,.8);margin-top:-6px;font-variant-numeric:tabular-nums}
+.shr{display:block;margin-top:6px;background:var(--soft);font-size:12px;padding:6px 10px;border:1px solid var(--line)}
+.clr{margin-top:10px;width:100%;padding:10px;background:transparent;border:1px solid var(--line);color:var(--muted);font-size:13px}
+.clr.arm{background:#d92d20;border-color:#d92d20;color:#fff}
+.sheet.s2{max-height:92vh;overflow-y:auto}
+#shimg{width:100%;max-height:46vh;object-fit:contain;border-radius:12px;display:block}
+.xtop{position:absolute;top:max(12px,env(safe-area-inset-top));right:12px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:18px;border:1px solid var(--line);z-index:5}
+.stp span.u{min-width:0;font-size:12px;font-weight:400;color:var(--muted);margin:0 6px 0 0}
+.modebtn{background:rgba(255,255,255,.12);border:1px solid var(--line);color:#fff;font-size:13px;padding:7px 14px;border-radius:999px}
+.iimg.edit{cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;outline:1px dashed rgba(255,255,255,.35)}
+#note:empty,#msg:empty{display:none}
+input.nmi{width:100%;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:10px;padding:6px 10px;font:inherit;font-weight:600}
+#msg{font-size:12px;color:#ffd08a;text-align:center}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@800&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="bgimg"></div>
+<div class="wrap">
+  <div class="brand">ZeraMine</div>
+  <h1 id="ttl">อย่าทำให้เจ๊เซร่าโกรธน้าาา</h1>
+  <div class="credit">made by discord: z2781 (znizzie)</div>
+  <div id="clock"></div>
+  <div class="card"><div id="rows"></div></div>
+  <div class="hint" id="hintmain">จบรอบกด + ที่ด่าน แล้ว Confirm จำนวน Zeranite</div>
+  <div class="hint" id="note"></div>
+  <div id="msg"></div>
+  <div class="card pad"><h2>สถิติ</h2><div id="stats"></div></div>
+  <div class="card pad"><h2>ประวัติการลง</h2><div class="hist" id="hist"></div><button class="clr" id="clr">ล้างประวัติ</button></div>
+  <div class="hint">ข้อมูลถูกจำไว้ในเครื่องนี้</div>
+  <div class="warn" id="warn">บันทึกไม่สำเร็จ (พื้นที่เก็บข้อมูลเต็ม)</div>
+  <div style="text-align:center"><button class="modebtn" id="mode">⚙ โหมดกำหนดเอง (ด่าน/ไอเทมของคุณ)</button></div>
+  <div class="foot">เว็บนี้จัดทำขึ้นเพื่อความบันเทิงเท่านั้น ไม่ได้เกี่ยวข้องกับผู้พัฒนาหรือเจ้าของเกม<br>รูปภาพและชื่อต่างๆ เป็นลิขสิทธิ์ของเจ้าของเกมนั้นๆ</div>
+</div>
+<div class="ov" id="dlg" hidden><button class="xtop" id="dx" aria-label="ปิด">✕</button><div class="sheet"><div class="q" id="dq"></div><div class="a"><button class="no" id="dno">ไม่ได้ ✗</button><div class="yes"><div class="stp"><button id="dm">−</button><span id="dn">1</span><span class="u" id="du">ชิ้น</span><button id="dp">+</button></div><button class="ok" id="dyes">ได้ Zeranite ✓</button></div></div><button class="cx" id="dcx">ยกเลิก</button></div></div>
+<div class="ov" id="imgov" hidden><button class="xtop" id="sx" aria-label="ปิด">✕</button><div class="sheet s2"><img id="shimg" alt="สถิติ ZeraMine"><div class="hint">กดแชร์เพื่อคัดลอกรูป แล้วไปกดวางในแชทได้เลย หรือกดเซฟเป็นรูป</div><div class="hint" id="scs" style="min-height:16px;color:#ffd08a"></div><button class="ok" id="scp">📋 แชร์ (คัดลอกรูป)</button><button class="no" id="sdl">⬇ เซฟเป็นรูป</button><button class="cx" id="scx">ปิด</button></div></div>
+<script>
+var KD="zeramine.v2",KC="zeramine.custom.v1",KM="zeramine.mode",NAME="#9/6 Shadow God Zera";
+var DEF_D="thumb-zera.jpg",DEF_I="zeranite.png",DEF_DH="bg-zera.jpg",DEF_C="bg-tree.jpg";
+var MODE="default",S={log:[],from:0},CP={dName:"",iName:""};
+var $=function(i){return document.getElementById(i)};
+try{if(localStorage.getItem(KM)==="custom")MODE="custom"}catch(e){}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function cfg(){return MODE==="custom"?{name:CP.dName,dImg:"",bg:DEF_C,iName:CP.iName,iImg:"",unit:"ชิ้น",edit:true,noimg:true}:{name:NAME,dImg:DEF_D,bg:DEF_DH,iName:"Zeranite",iImg:DEF_I,unit:"ชิ้น",edit:false,noimg:false}}
+function item(){return cfg().iName||"ไอเทม"}
+function valid(x){return x&&typeof x.t==="number"&&typeof x.d==="number"}
+function load(){
+  S={log:[],from:0};
+  try{
+    var d=JSON.parse(localStorage.getItem(MODE==="custom"?KC:KD)||"null");
+    if(d&&Array.isArray(d.log)){S.log=d.log.filter(valid);S.from=Math.min(+d.from||0,S.log.length)}
+    if(MODE==="custom"&&d){CP.dName=d.dName||"";CP.iName=d.iName||""}
+  }catch(e){}
+}
+function save(){
+  try{
+    var o={log:S.log,from:S.from};
+    if(MODE==="custom"){o.dName=CP.dName;o.iName=CP.iName}
+    localStorage.setItem(MODE==="custom"?KC:KD,JSON.stringify(o));$("warn").style.display="none";
+  }catch(e){$("warn").style.display="block"}
+}
+function fmt(t){return new Date(t).toLocaleString("th-TH",{timeZone:"Asia/Bangkok",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",hour12:false})}
+function drops(){return S.log.reduce(function(a,x){return a+x.d},0)}
+function rowHtml(id,name,img,n,cover,label,act,edit,noimg){
+  var ctl=act?'<div class="ctl"><button data-act="dec">−</button><div class="c">'+n+'</div><button class="p" data-act="inc">+</button></div>':'<div class="ctl"><div class="c">'+n+'</div></div>';
+  var im=noimg?'':'<div class="iimg'+(cover?' cover':'')+'" style="background-image:url('+img+')"></div>';
+  var nm=edit?'<input class="nmi" data-act="nm" value="'+esc(name)+'" placeholder="'+(id==="runs"?"ชื่อด่าน":"ชื่อไอเทม")+'" maxlength="40">':'<div class="nm">'+esc(name)+'</div>';
+  return '<div class="item" data-id="'+id+'">'+im+'<div class="mid">'+nm+'<div class="sub">'+label+(act?'<button class="rst" data-act="rst">รีเซ็ต</button>':'')+'</div></div>'+ctl+'</div>';
+}
+function cur(hit){var c=0,i=S.log.length-1;for(;i>=0&&((S.log[i].d>0)===hit);i--)c++;return{n:c,a:c?S.log[i+1].t:null}}
+function best(hit){var b={n:0},c=0,s=0;S.log.forEach(function(x,i){if((x.d>0)===hit){if(c===0)s=i;c++;if(c>b.n)b={n:c,a:S.log[s].t,b:x.t}}else c=0});return b}
+function st(l,n,d,k,u){return '<div class="st"><div class="l">'+l+(k&&n?'<button class="shr" data-share="'+k+'">📷 เซฟเป็นรูป</button>':'')+'</div><div class="v">'+n+' '+(u||"รอบ")+'<span class="d">'+(d||"—")+'</span></div></div>'}
+function renderRows(){
+  var c=cfg();
+  $("rows").innerHTML=rowHtml("runs",c.name,c.dImg,S.log.length,true,"จำนวนรอบ",true,c.edit,c.noimg)+rowHtml("zer",c.iName,c.iImg,drops(),false,"จำนวนที่ได้ ("+c.unit+")",false,c.edit,c.noimg);
+}
+function renderStats(){
+  var cd=cur(false),ch=cur(true),bd=best(false),bh=best(true),tot=drops(),u=cfg().unit,it=esc(item());
+  $("stats").innerHTML=
+    st("จำนวนรอบทั้งหมด",S.log.length,S.log.length?"ตั้งแต่ "+fmt(S.log[0].t):"")+
+    st("ไม่ดรอปติดต่อกัน (ตอนนี้)",cd.n,cd.n?"ตั้งแต่ "+fmt(cd.a):"")+
+    st("ดรอป "+it+" ติดต่อกัน (ตอนนี้)",ch.n,ch.n?"ตั้งแต่ "+fmt(ch.a):"")+
+    st(it+" รวม",tot,tot&&S.log.length?"เฉลี่ย "+(tot/S.log.length).toFixed(2)+" "+u+"ต่อรอบ":"",null,u)+
+    st("สถิติไม่ดรอปนานสุด",bd.n,bd.n?fmt(bd.a)+" – "+fmt(bd.b):"","dry")+
+    st("สถิติดรอปติดต่อกันสูงสุด",bh.n,bh.n?fmt(bh.a)+" – "+fmt(bh.b):"","hit")+
+    ((bd.n||bh.n)?'<button class="shr" data-share="both" style="width:100%;margin-top:10px">📷 เซฟทั้งสองสถิติเป็นรูปเดียว</button>':"");
+}
+function renderHist(){
+  var h="",L=S.log.length,lo=Math.max(S.from,L-100),it=esc(item()),u=cfg().unit;
+  for(var i=L-1;i>=lo;i--){var x=S.log[i];
+    h+='<div class="h"><span class="hn">#'+(i+1)+'</span><span class="tm">'+fmt(x.t)+'</span>'+(x.d>0?'<span class="hit">✓ '+it+' '+x.d+' '+u+'</span>':'<span class="miss">✗ ไม่ดรอป</span>')+'</div>';
+  }
+  $("hist").innerHTML=h||'<div class="hint" style="padding:8px 0">ยังไม่มีประวัติ</div>';
+  if(L-S.from>100)$("hist").innerHTML+='<div class="hint" style="padding:6px 0">แสดง 100 รอบล่าสุด (สถิติคิดจากทุกรอบ)</div>';
+}
+function renderMisc(){
+  var c=cfg(),cu=MODE==="custom";
+  $("ttl").textContent=cu?"ตัวนับรอบลงด่านของคุณ":"อย่าทำให้เจ๊เซร่าโกรธน้าาา";
+  $("mode").textContent=cu?"← กลับโหมด Zeranite":"⚙ โหมดกำหนดเอง (ด่าน/ไอเทมของคุณ)";
+  $("hintmain").textContent="จบรอบกด + ที่ด่าน แล้ว Confirm จำนวน "+item();
+  $("note").textContent=cu?"โหมดกำหนดเอง: พิมพ์ชื่อด่านและไอเทมที่ตามหาได้เลย · ข้อมูลแยกจากโหมด Zeranite":"";
+  $("bgimg").style.backgroundImage=c.bg?"url("+c.bg+")":"none";
+}
+function render(){
+  S.from=Math.min(S.from,S.log.length);
+  renderRows();renderStats();renderHist();renderMisc();save();
+}
+var mt=null;function msg(t){$("msg").textContent=t;clearTimeout(mt);mt=setTimeout(function(){$("msg").textContent=""},3000)}
+var dn=1;
+function ask(){dn=1;$("dn").textContent=1;$("du").textContent=cfg().unit;$("dyes").textContent="ได้ "+item()+" ✓";$("dq").textContent="รอบที่ #"+(S.log.length+1)+" ได้ "+item()+" ไหม?";$("dlg").hidden=false}
+function done(d){$("dlg").hidden=true;S.log.push({t:Date.now(),d:d});render();try{navigator.vibrate&&navigator.vibrate(15)}catch(x){}}
+$("dno").onclick=function(){done(0)};
+$("dyes").onclick=function(){done(dn)};
+$("dm").onclick=function(){if(dn>1){dn--;$("dn").textContent=dn}};
+$("dp").onclick=function(){dn++;$("dn").textContent=dn};
+$("dcx").onclick=$("dx").onclick=function(){$("dlg").hidden=true};
+document.addEventListener("keydown",function(e){if(e.key==="Escape"){$("imgov").hidden=true;$("dlg").hidden=true}});
+$("dlg").onclick=function(e){if(e.target===this)this.hidden=true};
+$("rows").addEventListener("click",function(e){
+  var b=e.target.closest("[data-act]");if(!b)return;var a=b.dataset.act,id=b.closest(".item").dataset.id,L=S.log;
+  if(a==="inc"){ask()}
+  else if(a==="dec"){L.pop();render()}
+  else if(a==="rst"){
+    if(b.classList.contains("arm")){S.log=[];S.from=0;render()}
+    else{b.classList.add("arm");b.textContent="กดอีกครั้ง";setTimeout(function(){if(b.isConnected){b.classList.remove("arm");b.textContent="รีเซ็ต"}},3000);msg("รีเซ็ตด่านจะล้างทุกอย่าง รวมถึงสถิติ")}
+  }
+});
+$("rows").addEventListener("input",function(e){
+  var t=e.target;if(t.dataset.act!=="nm")return;
+  if(t.closest(".item").dataset.id==="runs")CP.dName=t.value;else CP.iName=t.value;
+  renderStats();renderHist();renderMisc();save();
+});
+var cr=null;
+$("clr").onclick=function(){
+  var b=$("clr");
+  if(b.classList.contains("arm")){S.from=S.log.length;b.classList.remove("arm");b.textContent="ล้างประวัติ";clearTimeout(cr);render()}
+  else{b.classList.add("arm");b.textContent="กดอีกครั้งเพื่อล้างรายการ (สถิติยังอยู่)";cr=setTimeout(function(){b.classList.remove("arm");b.textContent="ล้างประวัติ"},3000)}
+};
+$("mode").onclick=function(){
+  save();MODE=MODE==="custom"?"default":"custom";
+  try{localStorage.setItem(KM,MODE)}catch(e){}
+  $("dlg").hidden=true;load();render();window.scrollTo(0,0);
+};
+var shBlob=null;
+var FONT='"Noto Sans Thai","Sarabun","Tahoma",sans-serif',shUrl="",shName="";
+function loadImg(src,cb){if(!src){cb(null);return}var im=new Image();im.onload=function(){cb(im)};im.onerror=function(){cb(null)};im.src=src}
+function shareCard(kind){
+  var c0=cfg(),bd=best(false),bh=best(true),T1="ไม่ดรอปติดต่อกันนานสุด",T2="ดรอปติดต่อกันสูงสุด";
+  var items=kind==="dry"?[[T1,bd]]:kind==="hit"?[[T2,bh]]:[[T1,bd],[T2,bh]];
+  if(!items.some(function(it){return it[1].n})){msg("ยังไม่มีสถิตินี้");return}
+  function rg(b){return !b.n?"":(b.a===b.b?fmt(b.a):fmt(b.a)+" – "+fmt(b.b))}
+  loadImg(c0.bg,function(bg){loadImg(c0.iImg,function(ic){
+    var W=1080,H=1200,c=document.createElement("canvas");c.width=W;c.height=H;var x=c.getContext("2d");
+    x.fillStyle="#120d1f";x.fillRect(0,0,W,H);
+    if(bg){var s=Math.max(W/bg.width,H/bg.height),w=bg.width*s,hh=bg.height*s;x.drawImage(bg,(W-w)/2,(H-hh)/2,w,hh)}
+    var g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,"rgba(10,6,20,.55)");g.addColorStop(1,"rgba(10,6,20,.88)");x.fillStyle=g;x.fillRect(0,0,W,H);
+    x.textAlign="center";x.textBaseline="alphabetic";
+    var gt=x.createLinearGradient(0,70,0,140);gt.addColorStop(0,"#eacdff");gt.addColorStop(.55,"#9b78dd");gt.addColorStop(1,"#6339c0");x.font="800 72px Cinzel,Georgia,serif";x.lineJoin="round";x.lineWidth=4;x.strokeStyle="#280e57";x.shadowColor="rgba(155,120,221,.8)";x.shadowBlur=24;x.strokeText("ZeraMine",W/2,130);x.fillStyle=gt;x.fillText("ZeraMine",W/2,130);x.shadowBlur=0;
+    if(c0.name){x.fillStyle="#d9d2ee";x.font="600 42px "+FONT;x.fillText(c0.name,W/2,196,980)}
+    if(MODE==="custom"&&c0.iName){x.fillStyle="#ffd9b8";x.font="600 40px "+FONT;x.fillText("ไอเทม: "+c0.iName,W/2,c0.name?254:196,980)}
+    if(items.length===1){
+      var it=items[0],b=it[1];
+      if(ic)x.drawImage(ic,W/2-90,240,180,180);
+      x.fillStyle="#ffb27a";x.font="700 54px "+FONT;x.fillText(it[0],W/2,520);
+      x.fillStyle="#fff";x.font="700 270px "+FONT;x.fillText(String(b.n),W/2,780);
+      x.font="700 72px "+FONT;x.fillText("รอบ",W/2,880);
+      x.fillStyle="#d9d2ee";x.font="400 38px "+FONT;x.fillText(rg(b),W/2,950);
+    }else{
+      if(ic)x.drawImage(ic,W/2-65,225,130,130);
+      items.forEach(function(it,i){
+        var b=it[1],y=i*300;
+        x.fillStyle="#ffb27a";x.font="700 48px "+FONT;x.fillText(it[0],W/2,440+y);
+        x.fillStyle="#fff";x.font="700 130px "+FONT;x.fillText(b.n?b.n+" รอบ":"—",W/2,575+y);
+        x.fillStyle="#d9d2ee";x.font="400 34px "+FONT;x.fillText(rg(b),W/2,635+y);
+      });
+      x.fillStyle="rgba(255,255,255,.25)";x.fillRect(W/2-300,690,600,2);
+    }
+    x.fillStyle="#fff";x.font="600 36px "+FONT;x.fillText("ลงทั้งหมด "+S.log.length+" รอบ · "+item()+" รวม "+drops()+" "+c0.unit,W/2,1005,1000);
+    if(MODE==="default"){x.fillStyle="#b9b0d4";x.font="400 28px "+FONT;x.fillText("อย่าทำให้เจ๊เซร่าโกรธน้าาา",W/2,1052)}
+    x.fillStyle="rgba(255,255,255,.18)";x.fillRect(W/2-200,1086,400,2);
+    x.fillStyle="#a79fc4";x.font="400 28px "+FONT;x.fillText("made by discord: z2781 (znizzie)",W/2,1128);
+    x.fillStyle="#cbb8ff";x.fillText("znizzie.github.io/ZeraMine",W/2,1168);
+    shUrl=c.toDataURL("image/png");c.toBlob(function(b){shBlob=b},"image/png");$("scs").textContent="";shName="zeramine-"+kind+(items.length===1?"-"+items[0][1].n:"")+".png";
+    $("shimg").src=shUrl;$("imgov").hidden=false;
+  })});
+}
+$("stats").addEventListener("click",function(e){var b=e.target.closest("[data-share]");if(b)shareCard(b.dataset.share)});
+$("scx").onclick=$("sx").onclick=function(){$("imgov").hidden=true};
+$("imgov").onclick=function(e){if(e.target===this)this.hidden=true};
+$("scp").onclick=function(){
+  var s=$("scs");
+  if(!shBlob||!navigator.clipboard||!window.ClipboardItem){s.textContent="เบราว์เซอร์นี้คัดลอกรูปไม่ได้ ให้ใช้เซฟเป็นรูปแทน";return}
+  navigator.clipboard.write([new ClipboardItem({"image/png":shBlob})]).then(function(){s.textContent="คัดลอกรูปแล้ว ✓ ไปกดวางในแชทได้เลย"}).catch(function(){s.textContent="คัดลอกไม่สำเร็จ ให้ใช้เซฟเป็นรูปแทน"});
+};
+$("sdl").onclick=function(){var a=document.createElement("a");a.href=shUrl;a.download=shName;document.body.appendChild(a);a.click();a.remove()};
+function tick(){$("clock").textContent=new Date().toLocaleString("th-TH",{timeZone:"Asia/Bangkok",weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:false})}
+tick();setInterval(tick,1000);
+load();render();
+</script>
+</body>
+</html>
